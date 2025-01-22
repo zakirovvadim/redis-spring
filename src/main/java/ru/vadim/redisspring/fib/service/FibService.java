@@ -2,6 +2,7 @@ package ru.vadim.redisspring.fib.service;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,12 @@ public class FibService {
     @CacheEvict(value = "math:fib", key = "#index")
     public void clearCache(int index) {
         System.out.println("clearing cache key");
+    }
+
+    @Scheduled(fixedRate = 10_000) // clear cache every 10 seconds (step1)
+    @CacheEvict(value = "math:fib", allEntries = true) //(step2)
+    public void clearCache() { //step3
+        System.out.println("clearing all keys");
     }
 
 
